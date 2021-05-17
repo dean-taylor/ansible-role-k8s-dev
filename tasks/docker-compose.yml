@@ -1,0 +1,19 @@
+---
+# tasks file for k8s-dev docker compose
+#
+- name: docker compose install
+  ansible.builtin.get_url:
+    checksum: "sha256:{{ k8s_dev_docker_compose_sha256 }}"
+    dest: /usr/local/bin/docker-compose-{{ k8s_dev_docker_compose_version }}
+    mode: 0755
+    url: https://github.com/docker/compose/releases/download/{{ k8s_dev_docker_compose_version }}/docker-compose-Linux-x86_64
+  register: docker_compose_download
+
+- name: create standard path link
+  ansible.builtin.file:
+    force: yes
+    path: /usr/local/bin/docker-compose
+    src: /usr/local/bin/docker-compose-{{ k8s_dev_docker_compose_version }}
+    state: link
+  when:
+    - docker_compose_download.changed

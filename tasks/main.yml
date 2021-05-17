@@ -1,0 +1,19 @@
+---
+# tasks file for k8s-dev
+#
+- name: docker install
+  ansible.builtin.include_role:
+    name: docker
+  vars:
+    docker_swarm_enabled: false
+    docker_group_members:
+      - vagrant
+
+#- name: docker-compose install
+#  ansible.builtin.include_tasks: docker-compose.yml
+
+- name: packer install
+  ansible.builtin.include_tasks: packer.yml
+
+#- name: sops install
+#  ansible.builtin.include_tasks: sops.yml

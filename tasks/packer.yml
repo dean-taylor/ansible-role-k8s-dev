@@ -1,0 +1,23 @@
+---
+# tasks file for k8s-dev packer
+#
+- name: GPG
+  ansible.builtin.apt_key:
+    state: present
+    url: https://apt.releases.hashicorp.com/gpg
+
+- name: HashiCorp repository
+  ansible.builtin.apt_repository:
+    repo: >
+      deb
+      [arch={{ ansible_architecture|replace('x86_64','amd64') }}]
+      https://apt.releases.hashicorp.com
+      {{ ansible_distribution_release }}
+      main
+    state: present
+    update_cache: yes
+
+- name: install
+  ansible.builtin.package:
+    name: packer
+    state: latest
